@@ -49,14 +49,14 @@ enum class reg : u32 {
     none = 0xffffffff,
 };
 
-enum class operand_type {
+enum class operand_type : u32 {
     none,
-    rm8, rm16, rm16_32,
-    reg8, reg16, reg16_32, reg32,
-    mem8, mem16, mem16_32, m_off,
     imm8, imm16, imm16_32,
-    sreg,
+    rm8, rm16, rm16_32,
+    mem8, mem16, mem16_32, m_off,
     builtin8, builtin16_32, builtin32,
+    reg8, reg16, reg16_32, reg32,
+    sreg,
     al, ax, eax,
     cl, dx
 };
@@ -87,9 +87,7 @@ struct operand {
 
     bool is_reg() const
     {
-        return type == operand_type::reg8 || type == operand_type::reg16 || type == operand_type::reg16_32
-            || type == operand_type::sreg || type == operand_type::al || type == operand_type::ax || type == operand_type::eax
-            || type == operand_type::cl || type == operand_type::dx;
+        return type >= operand_type::reg8 && type <= operand_type::dx;
     }
 
     bool is_mem() const
