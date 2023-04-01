@@ -14,13 +14,13 @@ using s32 = int32_t;
 
 enum insn_flag : u32 {
     /* Internal usage only - assigned on construction */
-    ext_mask = (0b111),
-    reg_ext = (1 << 3),
-    no_mod = (ext_mask | reg_ext),
+    insn_ext_mask = (0b111),
+    insn_reg_ext = (1 << 3),
+    insn_no_mod = (insn_ext_mask | insn_reg_ext),
 
     /* Added while decoding */
-    use_mem = (1 << 5),
-    has_sib = (1 << 6),
+    insn_use_mem = (1 << 5),
+    insn_has_sib = (1 << 6),
     insn_err = (1 << 7),
 };
 
@@ -105,25 +105,6 @@ struct insn {
         op.type = t1;
         op2.type = t2;
         op3.type = t3;
-    }
-
-    constexpr static insn no_mod(const char* n, u8 b1, u8 b2,
-        operand_type t1 = operand_type::none, operand_type t2 = operand_type::none)
-    {
-        return insn(n, b1, b2, 0, t1, t2, operand_type::none, insn_flag::no_mod);
-    }
-
-    constexpr static insn reg_ext(const char* n, u8 b1, u8 b2,
-        operand_type t1 = operand_type::none, operand_type t2 = operand_type::none,
-        operand_type t3 = operand_type::none)
-    {
-        return insn(n, b1, b2, 0, t1, t2, t3, insn_flag::reg_ext);
-    }
-
-    constexpr static insn digit(const char* n, u8 b1, u8 b2, u32 d,
-        operand_type t1 = operand_type::none, operand_type t2 = operand_type::none)
-    {
-        return insn(n, b1, b2, 0, t1, t2, operand_type::none, d);
     }
 
     const auto& dst() const { return op; }
